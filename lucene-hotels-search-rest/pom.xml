@@ -21,6 +21,11 @@
             <artifactId>lombok</artifactId>
             <version>1.18.4</version>
         </dependency>
+        <dependency>
+            <groupId>com.hematite</groupId>
+            <artifactId>lucene-hotels-search-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>
