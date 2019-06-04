@@ -4,7 +4,6 @@ import com.hematite.lucene.hotels.search.core.indexer.LuceneHotelsIndexer;
 import com.hematite.lucene.hotels.search.core.searcher.LuceneHotelsSearcher;
 import com.hematite.lucene.hotels.search.core.utils.LuceneHotelsFileFilter;
 import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.lucene.queryparser.flexible.core.QueryNodeException;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 

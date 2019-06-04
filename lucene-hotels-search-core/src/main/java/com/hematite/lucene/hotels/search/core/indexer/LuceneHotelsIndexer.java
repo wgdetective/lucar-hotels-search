@@ -1,14 +1,11 @@
 package com.hematite.lucene.hotels.search.core.indexer;
 
-import com.hematite.lucene.hotels.search.core.constants.LuceneHotelsConstant;
-import com.hematite.lucene.hotels.search.core.utils.LuceneHotelsFileFilter;
 import liquibase.util.csv.CSVReader;
 import lombok.extern.java.Log;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.TextField;
-import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
@@ -44,10 +41,9 @@ public class LuceneHotelsIndexer {
     public void createDocuments(final String dataDirPath, final FileFilter filter) {
         final File[] files = new File(dataDirPath).listFiles();
 
-        log.info("Start indexing files");
-        final Instant start = Instant.now();
-
-        if (files != null) {
+        if (files != null && files.length != 0) {
+            log.info("Start indexing files");
+            final Instant start = Instant.now();
             for (final File file : files) {
                 if(!file.isDirectory()
                    && !file.isHidden()
@@ -58,12 +54,13 @@ public class LuceneHotelsIndexer {
                     parseCsvFile(file);
                 }
             }
-        }
-        // TODO throw no files exception??
 
-        final Instant finish = Instant.now();
-        final long timeElapsed = Duration.between(start, finish).toMillis();
-        log.info("Files was indexed, total time: " + timeElapsed);
+            final Instant finish = Instant.now();
+            final long timeElapsed = Duration.between(start, finish).toMillis();
+            log.info("Files was indexed, total time: " + timeElapsed);
+        } else {
+            log.info("Directory is empty");
+        }
     }
 
     private void parseCsvFile(final File file) {
@@ -78,7 +75,7 @@ public class LuceneHotelsIndexer {
                 document.add(new TextField(HOTEL_NAME, values[2], Field.Store.YES));
                 indexWriter.addDocument(document);
             }
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
     }

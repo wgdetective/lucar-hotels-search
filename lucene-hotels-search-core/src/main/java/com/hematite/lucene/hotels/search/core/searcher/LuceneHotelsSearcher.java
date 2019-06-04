@@ -4,11 +4,13 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
@@ -30,15 +32,22 @@ public class LuceneHotelsSearcher {
         indexSearcher = new IndexSearcher(reader);
 
         parser = new QueryParser(HOTEL_NAME, new StandardAnalyzer());
+        parser.setDefaultOperator(QueryParser.Operator.AND);
     }
 
     public TopDocs search(final String searchQuery)
         throws IOException, ParseException {
-        final Query query = parser.parse(searchQuery);
+        final Query query;
+        final String modifiedString = searchQuery.replaceAll("[()/\\-:;*&~]", " ").trim();
+        if (modifiedString.isEmpty()) {
+            query = new TermQuery(new Term(HOTEL_NAME, modifiedString));
+        } else {
+            query = parser.parse(modifiedString.concat("*"));
+        }
         return indexSearcher.search(query, MAX_SEARCH);
     }
 
-    public Document getDocument(ScoreDoc scoreDoc) throws IOException {
+    public Document getDocument(final ScoreDoc scoreDoc) throws IOException {
         return indexSearcher.doc(scoreDoc.doc);
     }
 }
