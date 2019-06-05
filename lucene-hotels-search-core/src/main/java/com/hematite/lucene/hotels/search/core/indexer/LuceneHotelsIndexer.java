@@ -88,10 +88,14 @@ public class LuceneHotelsIndexer {
         final CSVReader reader = new CSVReader(new FileReader(file));
         final List<HotelObject> hotelObjects = new ArrayList<>();
 
+        HotelObject previousHotel = null;
         String[] values;
         while ((values = reader.readNext()) != null) {
-            final HotelObject hotelObject = new HotelObject(values[0], values[1], values[2]);
-            hotelObjects.add(hotelObject);
+            if (previousHotel == null || !previousHotel.getHotelId().equals(values[0])) {
+                final HotelObject hotelObject = new HotelObject(values[0], values[1], values[2]);
+                hotelObjects.add(hotelObject);
+                previousHotel = hotelObject;
+            }
         }
         return hotelObjects;
     }
