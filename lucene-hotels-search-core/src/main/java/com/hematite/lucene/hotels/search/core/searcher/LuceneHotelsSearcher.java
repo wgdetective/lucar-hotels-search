@@ -38,11 +38,12 @@ public class LuceneHotelsSearcher {
     public TopDocs search(final String searchQuery)
         throws IOException, ParseException {
         final Query query;
-        final String modifiedString = searchQuery.replaceAll("[()/\\-:;*&~]", " ").trim();
-        if (modifiedString.isEmpty()) {
-            query = new TermQuery(new Term(HOTEL_NAME, modifiedString));
+        final String preparedQuery =
+            searchQuery.replaceAll("[^a-zA-Z0-9\\s]", "").trim().toLowerCase();
+        if (preparedQuery.isEmpty()) {
+            query = new TermQuery(new Term(HOTEL_NAME, preparedQuery));
         } else {
-            query = parser.parse(modifiedString.concat("*"));
+            query = parser.parse(preparedQuery);
         }
         return indexSearcher.search(query, MAX_SEARCH);
     }
