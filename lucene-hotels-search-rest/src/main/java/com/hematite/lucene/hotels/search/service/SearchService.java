@@ -26,4 +26,14 @@ public class SearchService {
     public List<String> search(final String searchString) throws IOException, ParseException {
         return luceneHotelsSearchService.search(searchString);
     }
+
+    public String addIndexes(final String dataDirPath) throws IOException {
+        luceneHotelsSearchService.generateIndexes(dataDirPath);
+        return "Success";
+    }
+
+    public String deleteIndexes(final String dataDirPath) throws IOException {
+        luceneHotelsSearchService.deleteIndexes(dataDirPath);
+        return "Success";
+    }
 }

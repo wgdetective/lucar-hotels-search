@@ -36,7 +36,7 @@ public class ProcessTimeTest {
         }
         final Instant finish = Instant.now();
         final long timeElapsed = Duration.between(start, finish).toMillis();
-        log.info("Time for processing queries with tree: " + timeElapsed);
+        log.info("Time for processing queries with lucene: " + timeElapsed);
     }
 }
 

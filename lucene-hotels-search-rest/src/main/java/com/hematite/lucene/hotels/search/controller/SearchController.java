@@ -20,4 +20,14 @@ public class SearchController {
         throws IOException, ParseException {
         return searchService.search(searchString);
     }
+
+    @GetMapping("/add_indexes")
+    public String addIndexes(@RequestParam final String dataDirPath) throws IOException {
+        return searchService.addIndexes(dataDirPath);
+    }
+
+    @GetMapping("/delete_indexes")
+    public String deleteIndexes(@RequestParam final String dataDirPath) throws IOException {
+        return searchService.deleteIndexes(dataDirPath);
+    }
 }

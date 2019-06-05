@@ -23,8 +23,13 @@ public class LuceneHotelsSearchService {
     }
 
     public void generateIndexes(final String dataDirPath) throws IOException {
-        indexer.createDocuments(dataDirPath, new LuceneHotelsFileFilter());
-        indexer.close();
+        indexer.editDocuments(dataDirPath, new LuceneHotelsFileFilter(), false);
+        indexer.commit();
+    }
+
+    public void deleteIndexes(final String dataDirPath) throws IOException {
+        indexer.editDocuments(dataDirPath, new LuceneHotelsFileFilter(), true);
+        indexer.commit();
     }
 
     public List<String> search(final String searchQuery) throws IOException, ParseException {
