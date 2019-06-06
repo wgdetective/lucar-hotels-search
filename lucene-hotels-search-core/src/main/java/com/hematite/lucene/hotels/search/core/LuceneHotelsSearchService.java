@@ -38,10 +38,10 @@ public class LuceneHotelsSearchService {
         indexer.commit();
     }
 
-    public List<String> search(final String searchQuery) throws IOException, ParseException {
+    public List<String> search(final String searchQuery, final String langId) throws IOException, ParseException {
         final LuceneHotelsSearcher searcher = new LuceneHotelsSearcher(indexDirPath);
 
-        final TopDocs searchResult = searcher.search(searchQuery);
+        final TopDocs searchResult = searcher.search(searchQuery, langId);
         final List<String> result = new ArrayList<>();
 
         for(final ScoreDoc scoreDoc : searchResult.scoreDocs) {

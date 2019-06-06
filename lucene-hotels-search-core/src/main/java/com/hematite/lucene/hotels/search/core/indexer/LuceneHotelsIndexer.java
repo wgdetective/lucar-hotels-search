@@ -11,6 +11,10 @@ import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
@@ -89,14 +93,10 @@ public class LuceneHotelsIndexer {
         final CSVReader reader = new CSVReader(new FileReader(file));
         final List<HotelObject> hotelObjects = new ArrayList<>();
 
-        HotelObject previousHotel = null;
         String[] values;
         while ((values = reader.readNext()) != null) {
-            if (previousHotel == null || !previousHotel.getHotelId().equals(values[0])) {
-                final HotelObject hotelObject = new HotelObject(values[0], values[1], values[2]);
-                hotelObjects.add(hotelObject);
-                previousHotel = hotelObject;
-            }
+            final HotelObject hotelObject = new HotelObject(values[0], values[1], values[2]);
+            hotelObjects.add(hotelObject);
         }
         return hotelObjects;
     }
@@ -109,13 +109,14 @@ public class LuceneHotelsIndexer {
 
     private void deleteDocuments(final List<HotelObject> hotelObjects) throws IOException {
         for (final HotelObject hotelObject : hotelObjects) {
-            indexWriter.deleteDocuments(new Term(HOTEL_ID, hotelObject.getHotelId()));
+            indexWriter.deleteDocuments(createQuery(hotelObject));
         }
     }
 
     private void updateDocuments(final List<HotelObject> hotelObjects) throws IOException {
         for (final HotelObject hotelObject : hotelObjects) {
-            indexWriter.updateDocument(new Term(HOTEL_ID, hotelObject.getHotelId()), createDocument(hotelObject));
+            indexWriter.deleteDocuments(createQuery(hotelObject));
+            indexWriter.addDocument(createDocument(hotelObject));
         }
     }
 
@@ -125,5 +126,16 @@ public class LuceneHotelsIndexer {
         document.add(new TextField(LANG_ID, hotelObject.getLangId(), Field.Store.NO));
         document.add(new TextField(HOTEL_NAME, hotelObject.getHotelName(), Field.Store.YES));
         return document;
+    }
+
+    private BooleanQuery createQuery(final HotelObject hotelObject) {
+        final Query langQuery = new TermQuery(new Term(LANG_ID, hotelObject.getLangId()));
+        final Query hotelIdQuery = new TermQuery(new Term(HOTEL_ID, hotelObject.getHotelId()));
+
+        return
+            new BooleanQuery.Builder()
+                .add(langQuery, BooleanClause.Occur.MUST)
+                .add(hotelIdQuery, BooleanClause.Occur.MUST)
+                .build();
     }
 }

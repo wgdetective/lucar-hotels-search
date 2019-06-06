@@ -32,7 +32,7 @@ public class ProcessTimeTest {
             Files.readAllLines(Paths.get(ClassLoader.getSystemResource("hotelsQuery.txt").toURI()));
         final Instant start = Instant.now();
         for (final String value : lines) {
-            searchService.search(value);
+            searchService.search(value, "1");
         }
         final Instant finish = Instant.now();
         final long timeElapsed = Duration.between(start, finish).toMillis();

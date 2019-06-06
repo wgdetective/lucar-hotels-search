@@ -16,9 +16,10 @@ public class SearchController {
     private final SearchService searchService;
 
     @GetMapping("/search")
-    public List<String> search(@RequestParam final String searchString)
+    public List<String> search(@RequestParam final String searchString,
+                               @RequestParam final String langId)
         throws IOException, ParseException {
-        return searchService.search(searchString);
+        return searchService.search(searchString, langId);
     }
 
     @GetMapping("/add_indexes")
