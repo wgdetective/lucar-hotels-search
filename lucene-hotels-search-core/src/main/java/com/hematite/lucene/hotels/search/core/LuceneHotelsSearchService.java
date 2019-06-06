@@ -1,5 +1,6 @@
 package com.hematite.lucene.hotels.search.core;
 
+import com.hematite.lucene.hotels.search.core.constants.LuceneOperationType;
 import com.hematite.lucene.hotels.search.core.indexer.LuceneHotelsIndexer;
 import com.hematite.lucene.hotels.search.core.searcher.LuceneHotelsSearcher;
 import com.hematite.lucene.hotels.search.core.utils.LuceneHotelsFileFilter;
@@ -23,12 +24,17 @@ public class LuceneHotelsSearchService {
     }
 
     public void generateIndexes(final String dataDirPath) throws IOException {
-        indexer.editDocuments(dataDirPath, new LuceneHotelsFileFilter(), false);
+        indexer.editDocuments(dataDirPath, new LuceneHotelsFileFilter(), LuceneOperationType.CREATE_DOCUMENTS);
         indexer.commit();
     }
 
     public void deleteIndexes(final String dataDirPath) throws IOException {
-        indexer.editDocuments(dataDirPath, new LuceneHotelsFileFilter(), true);
+        indexer.editDocuments(dataDirPath, new LuceneHotelsFileFilter(), LuceneOperationType.DELETE_DOCUMENTS);
+        indexer.commit();
+    }
+
+    public void updateIndexes(final String dataDirPath) throws IOException {
+        indexer.editDocuments(dataDirPath, new LuceneHotelsFileFilter(), LuceneOperationType.UPDATE_DOCUMENTS);
         indexer.commit();
     }
 

@@ -1,5 +1,6 @@
 package com.hematite.lucene.hotels.search.core.indexer;
 
+import com.hematite.lucene.hotels.search.core.constants.LuceneOperationType;
 import com.hematite.lucene.hotels.search.core.object.HotelObject;
 import liquibase.util.csv.CSVReader;
 import lombok.extern.java.Log;
@@ -44,12 +45,12 @@ public class LuceneHotelsIndexer {
 
     public void editDocuments(final String dataDirPath,
                               final FileFilter filter,
-                              final boolean isDelete)
+                              final LuceneOperationType operationType)
         throws IOException {
         final File[] files = new File(dataDirPath).listFiles();
 
         if (files != null && files.length != 0) {
-            processFiles(files, filter, isDelete);
+            processFiles(files, filter, operationType);
         } else {
             log.info("Directory is empty");
         }
@@ -57,7 +58,7 @@ public class LuceneHotelsIndexer {
 
     private void processFiles(final File[] files,
                               final FileFilter filter,
-                              final boolean isDelete)
+                              final LuceneOperationType operationType)
         throws IOException {
         log.info("Start processing files");
         final Instant start = Instant.now();
@@ -71,10 +72,10 @@ public class LuceneHotelsIndexer {
                 filter.accept(file)) {
 
                 final List<HotelObject> hotelObjects = processCsv(file);
-                if (isDelete) {
-                    deleteDocuments(hotelObjects);
-                } else {
-                    addDocuments(hotelObjects);
+                switch (operationType) {
+                    case CREATE_DOCUMENTS: addDocuments(hotelObjects); break;
+                    case DELETE_DOCUMENTS: deleteDocuments(hotelObjects); break;
+                    case UPDATE_DOCUMENTS: updateDocuments(hotelObjects); break;
                 }
             }
         }
@@ -102,11 +103,7 @@ public class LuceneHotelsIndexer {
 
     private void addDocuments(final List<HotelObject> hotelObjects) throws IOException {
         for (final HotelObject hotelObject : hotelObjects) {
-            final Document document = new Document();
-            document.add(new TextField(HOTEL_ID, hotelObject.getHotelId(), Field.Store.YES));
-            document.add(new TextField(LANG_ID, hotelObject.getLangId(), Field.Store.NO));
-            document.add(new TextField(HOTEL_NAME, hotelObject.getHotelName(), Field.Store.YES));
-            indexWriter.addDocument(document);
+            indexWriter.addDocument(createDocument(hotelObject));
         }
     }
 
@@ -114,5 +111,19 @@ public class LuceneHotelsIndexer {
         for (final HotelObject hotelObject : hotelObjects) {
             indexWriter.deleteDocuments(new Term(HOTEL_ID, hotelObject.getHotelId()));
         }
+    }
+
+    private void updateDocuments(final List<HotelObject> hotelObjects) throws IOException {
+        for (final HotelObject hotelObject : hotelObjects) {
+            indexWriter.updateDocument(new Term(HOTEL_ID, hotelObject.getHotelId()), createDocument(hotelObject));
+        }
+    }
+
+    private Document createDocument(final HotelObject hotelObject) {
+        final Document document = new Document();
+        document.add(new TextField(HOTEL_ID, hotelObject.getHotelId(), Field.Store.YES));
+        document.add(new TextField(LANG_ID, hotelObject.getLangId(), Field.Store.NO));
+        document.add(new TextField(HOTEL_NAME, hotelObject.getHotelName(), Field.Store.YES));
+        return document;
     }
 }

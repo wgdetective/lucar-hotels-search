@@ -30,4 +30,9 @@ public class SearchController {
     public String deleteIndexes(@RequestParam final String dataDirPath) throws IOException {
         return searchService.deleteIndexes(dataDirPath);
     }
+
+    @GetMapping("/update_indexes")
+    public String updateIndexes(@RequestParam final String dataDirPath) throws IOException {
+        return searchService.updateIndexes(dataDirPath);
+    }
 }

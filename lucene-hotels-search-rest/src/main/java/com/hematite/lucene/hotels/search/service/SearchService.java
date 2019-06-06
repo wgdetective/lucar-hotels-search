@@ -36,4 +36,9 @@ public class SearchService {
         luceneHotelsSearchService.deleteIndexes(dataDirPath);
         return "Success";
     }
+
+    public String updateIndexes(final String dataDirPath) throws IOException {
+        luceneHotelsSearchService.updateIndexes(dataDirPath);
+        return "Success";
+    }
 }
