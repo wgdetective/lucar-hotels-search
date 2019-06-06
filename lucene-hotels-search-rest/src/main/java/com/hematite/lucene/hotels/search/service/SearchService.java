@@ -23,7 +23,23 @@ public class SearchService {
         luceneHotelsSearchService.generateIndexes(dataDirPath);
     }
 
-    public List<String> search(final String searchString) throws IOException, ParseException {
-        return luceneHotelsSearchService.search(searchString);
+    public List<String> search(final String searchString, final String langId)
+        throws IOException, ParseException {
+        return luceneHotelsSearchService.search(searchString, langId);
+    }
+
+    public String addIndexes(final String dataDirPath) throws IOException {
+        luceneHotelsSearchService.generateIndexes(dataDirPath);
+        return "Success";
+    }
+
+    public String deleteIndexes(final String dataDirPath) throws IOException {
+        luceneHotelsSearchService.deleteIndexes(dataDirPath);
+        return "Success";
+    }
+
+    public String updateIndexes(final String dataDirPath) throws IOException {
+        luceneHotelsSearchService.updateIndexes(dataDirPath);
+        return "Success";
     }
 }

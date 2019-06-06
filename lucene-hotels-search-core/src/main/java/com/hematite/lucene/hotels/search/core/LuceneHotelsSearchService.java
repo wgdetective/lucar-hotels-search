@@ -1,5 +1,6 @@
 package com.hematite.lucene.hotels.search.core;
 
+import com.hematite.lucene.hotels.search.core.constants.LuceneOperationType;
 import com.hematite.lucene.hotels.search.core.indexer.LuceneHotelsIndexer;
 import com.hematite.lucene.hotels.search.core.searcher.LuceneHotelsSearcher;
 import com.hematite.lucene.hotels.search.core.utils.LuceneHotelsFileFilter;
@@ -23,14 +24,24 @@ public class LuceneHotelsSearchService {
     }
 
     public void generateIndexes(final String dataDirPath) throws IOException {
-        indexer.createDocuments(dataDirPath, new LuceneHotelsFileFilter());
-        indexer.close();
+        indexer.editDocuments(dataDirPath, new LuceneHotelsFileFilter(), LuceneOperationType.CREATE_DOCUMENTS);
+        indexer.commit();
     }
 
-    public List<String> search(final String searchQuery) throws IOException, ParseException {
+    public void deleteIndexes(final String dataDirPath) throws IOException {
+        indexer.editDocuments(dataDirPath, new LuceneHotelsFileFilter(), LuceneOperationType.DELETE_DOCUMENTS);
+        indexer.commit();
+    }
+
+    public void updateIndexes(final String dataDirPath) throws IOException {
+        indexer.editDocuments(dataDirPath, new LuceneHotelsFileFilter(), LuceneOperationType.UPDATE_DOCUMENTS);
+        indexer.commit();
+    }
+
+    public List<String> search(final String searchQuery, final String langId) throws IOException, ParseException {
         final LuceneHotelsSearcher searcher = new LuceneHotelsSearcher(indexDirPath);
 
-        final TopDocs searchResult = searcher.search(searchQuery);
+        final TopDocs searchResult = searcher.search(searchQuery, langId);
         final List<String> result = new ArrayList<>();
 
         for(final ScoreDoc scoreDoc : searchResult.scoreDocs) {

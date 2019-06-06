@@ -7,6 +7,8 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
@@ -19,6 +21,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 
 import static com.hematite.lucene.hotels.search.core.constants.LuceneHotelsConstant.HOTEL_NAME;
+import static com.hematite.lucene.hotels.search.core.constants.LuceneHotelsConstant.LANG_ID;
 import static com.hematite.lucene.hotels.search.core.constants.LuceneHotelsConstant.MAX_SEARCH;
 
 public class LuceneHotelsSearcher {
@@ -35,16 +38,25 @@ public class LuceneHotelsSearcher {
         parser.setDefaultOperator(QueryParser.Operator.AND);
     }
 
-    public TopDocs search(final String searchQuery)
+    public TopDocs search(final String searchQuery, final String langId)
         throws IOException, ParseException {
-        final Query query;
-        final String preparedQuery =
+        final BooleanQuery query;
+        final Query langQuery = new TermQuery(new Term(LANG_ID, langId));
+        final Query hotelNameQuery;
+
+        final String preparedQueryString =
             searchQuery.replaceAll("[^a-zA-Z0-9\\s]", "").trim().toLowerCase();
-        if (preparedQuery.isEmpty()) {
-            query = new TermQuery(new Term(HOTEL_NAME, preparedQuery));
+        if (preparedQueryString.isEmpty()) {
+            hotelNameQuery = new TermQuery(new Term(HOTEL_NAME, preparedQueryString));
         } else {
-            query = parser.parse(preparedQuery);
+            hotelNameQuery = parser.parse(preparedQueryString);
         }
+
+        query =
+            new BooleanQuery.Builder()
+                .add(langQuery, BooleanClause.Occur.MUST)
+                .add(hotelNameQuery, BooleanClause.Occur.MUST)
+                .build();
         return indexSearcher.search(query, MAX_SEARCH);
     }
 
