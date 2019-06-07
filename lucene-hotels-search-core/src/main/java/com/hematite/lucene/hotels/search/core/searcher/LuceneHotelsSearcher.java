@@ -20,9 +20,9 @@ import org.apache.lucene.store.FSDirectory;
 import java.io.IOException;
 import java.nio.file.Paths;
 
-import static com.hematite.lucene.hotels.search.core.constants.LuceneHotelsConstant.HOTEL_NAME;
-import static com.hematite.lucene.hotels.search.core.constants.LuceneHotelsConstant.LANG_ID;
-import static com.hematite.lucene.hotels.search.core.constants.LuceneHotelsConstant.MAX_SEARCH;
+import static com.hematite.lucene.hotels.search.core.constant.LuceneHotelsConstant.HOTEL_NAME;
+import static com.hematite.lucene.hotels.search.core.constant.LuceneHotelsConstant.LANG_ID;
+import static com.hematite.lucene.hotels.search.core.constant.LuceneHotelsConstant.MAX_SEARCH;
 
 public class LuceneHotelsSearcher {
     private final IndexSearcher indexSearcher;

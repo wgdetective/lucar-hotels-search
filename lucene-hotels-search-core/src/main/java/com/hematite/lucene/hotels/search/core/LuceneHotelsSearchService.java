@@ -1,9 +1,9 @@
 package com.hematite.lucene.hotels.search.core;
 
-import com.hematite.lucene.hotels.search.core.constants.LuceneOperationType;
+import com.hematite.lucene.hotels.search.core.constant.LuceneOperationType;
 import com.hematite.lucene.hotels.search.core.indexer.LuceneHotelsIndexer;
 import com.hematite.lucene.hotels.search.core.searcher.LuceneHotelsSearcher;
-import com.hematite.lucene.hotels.search.core.utils.LuceneHotelsFileFilter;
+import com.hematite.lucene.hotels.search.core.util.LuceneHotelsFileFilter;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.hematite.lucene.hotels.search.core.constants.LuceneHotelsConstant.HOTEL_NAME;
+import static com.hematite.lucene.hotels.search.core.constant.LuceneHotelsConstant.HOTEL_NAME;
 
 public class LuceneHotelsSearchService {
     private final LuceneHotelsIndexer indexer;

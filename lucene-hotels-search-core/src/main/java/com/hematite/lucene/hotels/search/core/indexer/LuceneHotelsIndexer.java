@@ -1,6 +1,6 @@
 package com.hematite.lucene.hotels.search.core.indexer;
 
-import com.hematite.lucene.hotels.search.core.constants.LuceneOperationType;
+import com.hematite.lucene.hotels.search.core.constant.LuceneOperationType;
 import com.hematite.lucene.hotels.search.core.object.HotelObject;
 import liquibase.util.csv.CSVReader;
 import lombok.extern.java.Log;
@@ -28,9 +28,9 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.hematite.lucene.hotels.search.core.constants.LuceneHotelsConstant.HOTEL_ID;
-import static com.hematite.lucene.hotels.search.core.constants.LuceneHotelsConstant.HOTEL_NAME;
-import static com.hematite.lucene.hotels.search.core.constants.LuceneHotelsConstant.LANG_ID;
+import static com.hematite.lucene.hotels.search.core.constant.LuceneHotelsConstant.HOTEL_ID;
+import static com.hematite.lucene.hotels.search.core.constant.LuceneHotelsConstant.HOTEL_NAME;
+import static com.hematite.lucene.hotels.search.core.constant.LuceneHotelsConstant.LANG_ID;
 
 @Log
 public class LuceneHotelsIndexer {

@@ -1,4 +1,4 @@
-package com.hematite.lucene.hotels.search.core.utils;
+package com.hematite.lucene.hotels.search.core.util;
 
 import java.io.File;
 import java.io.FileFilter;
