@@ -77,9 +77,15 @@ public class LuceneHotelsIndexer {
 
                 final List<HotelObject> hotelObjects = processCsv(file);
                 switch (operationType) {
-                    case CREATE_DOCUMENTS: addDocuments(hotelObjects); break;
-                    case DELETE_DOCUMENTS: deleteDocuments(hotelObjects); break;
-                    case UPDATE_DOCUMENTS: updateDocuments(hotelObjects); break;
+                    case CREATE_DOCUMENTS:
+                        addDocuments(hotelObjects);
+                        break;
+                    case DELETE_DOCUMENTS:
+                        deleteDocuments(hotelObjects);
+                        break;
+                    case UPDATE_DOCUMENTS:
+                        updateDocuments(hotelObjects);
+                        break;
                 }
             }
         }

@@ -20,7 +20,7 @@ public class LuceneHotelsSearchApplication {
         return new LuceneHotelsSearchService(indexDirPath);
     }
 
-   public static void main(final String[] args) {
+    public static void main(final String[] args) {
         SpringApplication.run(LuceneHotelsSearchApplication.class, args);
     }
 

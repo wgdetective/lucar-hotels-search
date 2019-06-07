@@ -6,5 +6,6 @@ public class LuceneHotelsConstant {
     public static final String HOTEL_NAME = "hotelName";
     public static final int MAX_SEARCH = 10;
 
-    private LuceneHotelsConstant() {}
+    private LuceneHotelsConstant() {
+    }
 }

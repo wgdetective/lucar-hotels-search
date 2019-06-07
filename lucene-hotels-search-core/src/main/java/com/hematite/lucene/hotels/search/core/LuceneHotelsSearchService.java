@@ -44,7 +44,7 @@ public class LuceneHotelsSearchService {
         final TopDocs searchResult = searcher.search(searchQuery, langId);
         final List<String> result = new ArrayList<>();
 
-        for(final ScoreDoc scoreDoc : searchResult.scoreDocs) {
+        for (final ScoreDoc scoreDoc : searchResult.scoreDocs) {
             result.add(searcher.getDocument(scoreDoc).get(HOTEL_NAME));
         }
 
