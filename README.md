@@ -28,7 +28,7 @@ luceneHotelsSearchService.deleteIndexes(dataDirPath);
 luceneHotelsSearchService.updateIndexes(dataDirPath);
 ```
 
-3\.	For perform search call LuceneHotelsSearchService.search method, pass search value and lang id as parameter:  
+4\.	For perform search call LuceneHotelsSearchService.search method, pass search value and lang id as parameter:  
 ```
 final List<String> result = luceneHotelsSearchService.search(searchString, langId);
 ```

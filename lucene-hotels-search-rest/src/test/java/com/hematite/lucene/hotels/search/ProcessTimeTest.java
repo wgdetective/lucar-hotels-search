@@ -1,5 +1,6 @@
 package com.hematite.lucene.hotels.search;
 
+import com.hematite.lucene.hotels.search.core.object.HotelObject;
 import com.hematite.lucene.hotels.search.service.SearchService;
 import lombok.extern.java.Log;
 import org.apache.lucene.queryparser.classic.ParseException;
@@ -15,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -30,9 +32,15 @@ public class ProcessTimeTest {
         throws IOException, ParseException, URISyntaxException {
         final List<String> lines =
             Files.readAllLines(Paths.get(ClassLoader.getSystemResource("hotelsQuery.txt").toURI()));
+        final List<HotelObject> hotelObjects = new ArrayList<>();
+        lines.forEach(line -> {
+            final String[] values = line.split("//");
+            hotelObjects.add(new HotelObject(null, values[1], values[0]));
+        });
+
         final Instant start = Instant.now();
-        for (final String value : lines) {
-            searchService.search(value, "1");
+        for (final HotelObject value : hotelObjects) {
+            searchService.search(value.getLangId(), value.getHotelName());
         }
         final Instant finish = Instant.now();
         final long timeElapsed = Duration.between(start, finish).toMillis();
